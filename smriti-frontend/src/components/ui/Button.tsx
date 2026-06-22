@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode } from 'react'
+import React, { forwardRef, type ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -7,9 +7,10 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export interface ButtonProps extends React.ComponentProps<typeof motion.button> {
+export interface ButtonProps extends Omit<React.ComponentProps<typeof motion.button>, 'children'> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   trailingIcon?: ReactNode
+  children?: ReactNode
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

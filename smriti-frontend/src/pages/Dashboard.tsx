@@ -30,9 +30,9 @@ function AssetStatusBadge({ severity }: { severity: AssetSummary['severity'] }) 
 export function Dashboard() {
   const { data: assets, isLoading } = useAssets()
 
-  const criticalAssets = assets?.filter(a => a.severity === 'CRITICAL') || []
-  const warningAssets = assets?.filter(a => a.severity === 'WARNING') || []
-  const okAssets = assets?.filter(a => a.severity === 'OK') || []
+  const criticalAssets = assets?.filter((a: AssetSummary) => a.severity === 'CRITICAL') || []
+  const warningAssets = assets?.filter((a: AssetSummary) => a.severity === 'WARNING') || []
+  const okAssets = assets?.filter((a: AssetSummary) => a.severity === 'OK') || []
 
   return (
     <div className="flex flex-col gap-12 md:gap-24">
@@ -91,14 +91,14 @@ export function Dashboard() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[240px]">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[270px]">
              <Card className="md:col-span-8 md:row-span-2"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
              <Card className="md:col-span-4"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
              <Card className="md:col-span-4"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[240px]">
-            {assets?.slice(0, 3).map((asset, i) => {
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[270px]">
+            {assets?.slice(0, 3).map((asset: AssetSummary, i: number) => {
               // Asymmetrical layout logic: first item takes massive space, others stack
               const spanClasses = i === 0 ? "md:col-span-8 md:row-span-2" : "md:col-span-4"
               const variant = asset.severity.toLowerCase() as 'critical' | 'warning' | 'ok' | 'default'
@@ -113,11 +113,11 @@ export function Dashboard() {
                   className={spanClasses}
                 >
                   <Card variant={variant} className="h-full">
-                    <div className="p-8 h-full flex flex-col justify-between">
+                    <div className="p-6 h-full flex flex-col justify-between">
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-1">
                           <AssetStatusBadge severity={asset.severity} />
-                          <h3 className="text-3xl font-bold mt-3">{asset.display_name}</h3>
+                          <h3 className="text-2xl font-bold mt-3">{asset.display_name}</h3>
                           <span className="text-sm text-textSecondary font-mono">{asset.asset_type}</span>
                         </div>
                         <div className="flex flex-col items-end">
@@ -126,7 +126,7 @@ export function Dashboard() {
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-6 mt-8">
+                      <div className="flex items-center gap-6 mt-4">
                         <div className="flex flex-col">
                           <span className="text-textSecondary text-sm">Knowledge Items</span>
                           <span className="font-mono text-xl">{asset.item_count}</span>

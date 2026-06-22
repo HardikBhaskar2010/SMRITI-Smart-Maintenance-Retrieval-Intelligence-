@@ -160,6 +160,39 @@ pip install fastapi uvicorn[standard] chromadb networkx pymupdf pytesseract Pill
 
 ---
 
+## Phase 9 — Android APK Compilation & GitHub Actions CI
+
+We will add a cross-platform compilation layer using **Capacitor** to build a native Android APK from SMRITI's web bundle, and automate this inside a GitHub Actions CI workflow that publishes the compiled APK as a release asset.
+
+### Proposed Changes
+
+#### [MODIFY] [package.json](file:///c:/Users/sesa457837/Videos/Smriti/smriti-frontend/package.json)
+- Add `@capacitor/core` and `@capacitor/android` to dependencies.
+- Add `@capacitor/cli` to devDependencies.
+
+#### [NEW] [capacitor.config.json](file:///c:/Users/sesa457837/Videos/Smriti/smriti-frontend/capacitor.config.json)
+- Define standard Capacitor configurations specifying `appId: "com.smriti.app"`, `appName: "Smriti"`, and `webDir: "dist"`.
+
+#### [NEW] [build-apk.yml](file:///c:/Users/sesa457837/Videos/Smriti/.github/workflows/build-apk.yml)
+- Create a GitHub Actions workflow that:
+  1. Triggers on `push` to `master` (or manual execution).
+  2. Sets up Node.js 20 and Java JDK 17.
+  3. Installs dependencies and builds the Vite frontend.
+  4. Dynamically initializes the Android native project (`npx cap add android` + `npx cap sync`).
+  5. Compiles the APK using Gradle (`./gradlew assembleDebug`).
+  6. Uploads the built `.apk` to the workflow run artifacts.
+  7. Publishes/attaches the `.apk` as a release asset to a GitHub Release.
+
+### Verification Plan
+
+#### Automated CI Run
+- Push a change to verify the GitHub Actions pipeline runs, successfully compiles the debug APK, and uploads the `.apk` package.
+
+#### Manual Verification
+- Verify the generated `app-debug.apk` installs and launches on an Android emulator or device, pointing to SMRITI's layout correctly.
+
+---
+
 ## Critical Path (non-negotiable order)
 ```
 [Phase 1] → [Phase 2] → [Phase 3] → [Phase 4] → [Phase 5] → [Phase 6]
@@ -167,15 +200,18 @@ pip install fastapi uvicorn[standard] chromadb networkx pymupdf pytesseract Pill
 [Phase 7 frontend] runs in parallel after Phase 4 backend APIs are live
                                                                     ↓
                                                              [Phase 8]
+                                                                    ↓
+                                                             [Phase 9]
 ```
 
 ## File Count
 - Backend: ~35 Python files
 - Frontend: ~45 TypeScript/TSX files
 - Scripts: 3 Python scripts
-- Config: .env, vite.config, tailwind.config, tsconfig, package.json, requirements.txt
+- Config: .env, vite.config, tailwind.config, tsconfig, package.json, requirements.txt, capacitor.config.json, build-apk.yml
 
 ---
 
 ## Progress Tracking
 See [task.md](task.md) for live task status.
+
