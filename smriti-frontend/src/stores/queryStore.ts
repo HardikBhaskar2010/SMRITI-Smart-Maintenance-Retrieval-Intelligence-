@@ -2,25 +2,27 @@ import { create } from 'zustand'
 import type { QueryResponse } from '@/api/types'
 
 interface QueryState {
-  query: string
-  isLoading: boolean
-  result: QueryResponse | null
-  error: string | null
-  setQuery: (q: string) => void
-  setLoading: (v: boolean) => void
-  setResult: (r: QueryResponse | null) => void
-  setError: (e: string | null) => void
+  currentQuery: string
+  lastResult: QueryResponse | null
+  isQuerying: boolean
+  history: string[]
+  setCurrentQuery: (q: string) => void
+  setLastResult: (r: QueryResponse | null) => void
+  setIsQuerying: (v: boolean) => void
+  pushHistory: (q: string) => void
   reset: () => void
 }
 
 export const useQueryStore = create<QueryState>((set) => ({
-  query: '',
-  isLoading: false,
-  result: null,
-  error: null,
-  setQuery: (q) => set({ query: q }),
-  setLoading: (v) => set({ isLoading: v }),
-  setResult: (r) => set({ result: r, error: null }),
-  setError: (e) => set({ error: e, isLoading: false }),
-  reset: () => set({ query: '', result: null, error: null, isLoading: false }),
+  currentQuery: '',
+  lastResult: null,
+  isQuerying: false,
+  history: [],
+  setCurrentQuery: (q) => set({ currentQuery: q }),
+  setLastResult: (r) => set({ lastResult: r, isQuerying: false }),
+  setIsQuerying: (v) => set({ isQuerying: v }),
+  pushHistory: (q) => set((s) => ({
+    history: [q, ...s.history.filter((h) => h !== q)].slice(0, 20),
+  })),
+  reset: () => set({ currentQuery: '', lastResult: null, isQuerying: false }),
 }))

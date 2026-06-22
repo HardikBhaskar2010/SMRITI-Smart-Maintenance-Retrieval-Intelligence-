@@ -1,5 +1,8 @@
 import api from './client'
-import type { QueryResponse } from './types'
+import type { QueryRequest, QueryResponse } from './types'
 
-export const runQuery = (query: string, assetId?: string): Promise<QueryResponse> =>
-  api.post('/query', { query, asset_id: assetId, max_results: 5 }).then((r) => r.data)
+export const submitQuery = (req: QueryRequest): Promise<QueryResponse> =>
+  api.post('/query', req).then((r) => r.data)
+
+/** Alias for backward compat */
+export const runQuery = submitQuery

@@ -1,10 +1,20 @@
 import api from './client'
 
-export const startGuruSession = (assetId: string, expertName: string) =>
-  api.post('/guru/start', { asset_id: assetId, expert_name: expertName }).then((r) => r.data)
+export interface GuruStartRequest {
+  asset_id: string;
+  expert_name: string;
+}
 
-export const respondToGuru = (sessionId: string, answer: string) =>
-  api.post('/guru/respond', { session_id: sessionId, answer }).then((r) => r.data)
+export interface GuruRespondRequest {
+  session_id: string;
+  answer: string;
+}
+
+export const startGuruSession = (req: GuruStartRequest) =>
+  api.post('/guru/start', req).then((r) => r.data)
+
+export const respondToGuru = (req: GuruRespondRequest) =>
+  api.post('/guru/respond', req).then((r) => r.data)
 
 export const getGuruSession = (sessionId: string) =>
   api.get(`/guru/session/${sessionId}`).then((r) => r.data)

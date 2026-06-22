@@ -542,3 +542,44 @@ body {
 .bottom-nav__item:hover {
   color: var(--color-accent);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   SMRITI DESIGN TOKEN ALIASES (matches 03_App_Design.md exactly)
+══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-primary:   #0D0F14;
+  --bg-surface:   #13161E;
+  --bg-elevated:  #1A1E28;
+  --bg-stroke:    #252A38;
+  --text-primary:   #E8EAF0;
+  --text-secondary: #8A90A0;
+  --text-muted:     #4A5060;
+  --accent-teal:      #00C9A7;
+  --accent-teal-dim:  rgba(0,201,167,0.12);
+  --accent-teal-glow: rgba(0,201,167,0.25);
+  --debt-ok:        #22C55E;
+  --debt-warn:      #F59E0B;
+  --debt-crit:      #EF4444;
+  --debt-crit-glow: rgba(239,68,68,0.18);
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYOUT WRAPPERS
+══════════════════════════════════════════════════════════════════ */
+
+.sidebar-wrapper   { display: flex; }
+.topbar-wrapper    { display: none; }
+.bottomnav-wrapper { display: none; }
+
+@media (max-width: 768px) {
+  .sidebar-wrapper   { display: none; }
+  .topbar-wrapper    { display: block; }
+  .bottomnav-wrapper { display: block; }
+  main { padding-bottom: 64px; }
+}

@@ -1,16 +1,18 @@
 import { create } from 'zustand'
-import type { AssetSummary, AssetDetail } from '@/api/types'
+import type { AssetSummary } from '@/api/types'
 
 interface AssetState {
   assets: AssetSummary[]
-  selectedAsset: AssetDetail | null
   setAssets: (assets: AssetSummary[]) => void
-  setSelectedAsset: (asset: AssetDetail | null) => void
+  getCriticalCount: () => number
+  getWarningCount: () => number
+  getOkCount: () => number
 }
 
-export const useAssetStore = create<AssetState>((set) => ({
+export const useAssetStore = create<AssetState>((set, get) => ({
   assets: [],
-  selectedAsset: null,
   setAssets: (assets) => set({ assets }),
-  setSelectedAsset: (asset) => set({ selectedAsset: asset }),
+  getCriticalCount: () => get().assets.filter((a) => a.severity === 'CRITICAL').length,
+  getWarningCount: () => get().assets.filter((a) => a.severity === 'WARNING').length,
+  getOkCount: () => get().assets.filter((a) => a.severity === 'OK').length,
 }))

@@ -1,64 +1,37 @@
 import { create } from 'zustand'
+import type { GuruSession } from '@/api/types'
 
 interface GuruState {
-  sessionId: string | null
-  assetId: string | null
-  expertName: string
-  currentQuestion: string
-  messages: Array<{ role: string; content: string; timestamp: string }>
-  initialScore: number
-  currentScore: number
-  questionsAsked: number
-  status: 'idle' | 'active' | 'completed'
-  isLoading: boolean
+  session: GuruSession | null
+  isStarting: boolean
+  isSubmitting: boolean
+  expertAnswer: string
+  displayedDebtScore: number
 
-  startSession: (sessionId: string, assetId: string, expertName: string, firstQuestion: string, debtScore: number) => void
-  addMessage: (role: string, content: string) => void
-  updateScore: (score: number) => void
-  setCurrentQuestion: (q: string) => void
-  setLoading: (v: boolean) => void
-  endSession: () => void
-  reset: () => void
+  setSession: (session: GuruSession | null) => void
+  updateSession: (partial: Partial<GuruSession>) => void
+  setIsStarting: (v: boolean) => void
+  setIsSubmitting: (v: boolean) => void
+  setExpertAnswer: (a: string) => void
+  clearAnswer: () => void
+  setDisplayedDebtScore: (score: number) => void
 }
 
 export const useGuruStore = create<GuruState>((set) => ({
-  sessionId: null,
-  assetId: null,
-  expertName: '',
-  currentQuestion: '',
-  messages: [],
-  initialScore: 0,
-  currentScore: 0,
-  questionsAsked: 0,
-  status: 'idle',
-  isLoading: false,
+  session: null,
+  isStarting: false,
+  isSubmitting: false,
+  expertAnswer: '',
+  displayedDebtScore: 0,
 
-  startSession: (sessionId, assetId, expertName, firstQuestion, debtScore) =>
-    set({
-      sessionId,
-      assetId,
-      expertName,
-      currentQuestion: firstQuestion,
-      messages: [{ role: 'interviewer', content: firstQuestion, timestamp: new Date().toISOString() }],
-      initialScore: debtScore,
-      currentScore: debtScore,
-      questionsAsked: 1,
-      status: 'active',
-    }),
-
-  addMessage: (role, content) =>
+  setSession: (session) => set({ session }),
+  updateSession: (partial) =>
     set((s) => ({
-      messages: [...s.messages, { role, content, timestamp: new Date().toISOString() }],
+      session: s.session ? { ...s.session, ...partial } : null,
     })),
-
-  updateScore: (score) => set({ currentScore: score }),
-  setCurrentQuestion: (q) => set({ currentQuestion: q, questionsAsked: (s: any) => s.questionsAsked + 1 }),
-  setLoading: (v) => set({ isLoading: v }),
-  endSession: () => set({ status: 'completed' }),
-  reset: () =>
-    set({
-      sessionId: null, assetId: null, expertName: '', currentQuestion: '',
-      messages: [], initialScore: 0, currentScore: 0, questionsAsked: 0,
-      status: 'idle', isLoading: false,
-    }),
+  setIsStarting: (v) => set({ isStarting: v }),
+  setIsSubmitting: (v) => set({ isSubmitting: v }),
+  setExpertAnswer: (a) => set({ expertAnswer: a }),
+  clearAnswer: () => set({ expertAnswer: '' }),
+  setDisplayedDebtScore: (score) => set({ displayedDebtScore: score }),
 }))
