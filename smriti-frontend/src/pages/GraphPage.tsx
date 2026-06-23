@@ -4,7 +4,7 @@ import { AssetDrawer } from '@/components/asset/AssetDrawer';
 
 export function GraphPage() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
+    <main style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
       {/* Page header */}
       <div style={{ padding: '20px 32px 16px', borderBottom: '1px solid var(--bg-stroke)', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2px' }}>
@@ -24,6 +24,6 @@ export function GraphPage() {
       </div>
 
       <AssetDrawer />
-    </div>
+    </main>
   );
 }

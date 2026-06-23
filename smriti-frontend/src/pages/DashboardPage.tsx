@@ -61,10 +61,11 @@ export function DashboardPage() {
           borderRadius: 'var(--radius-md)',
           padding: '3px',
         }}>
-          {([['grid', LayoutGrid], ['table', Table2]] as const).map(([mode, Icon]) => (
+          {([['grid', LayoutGrid, 'Switch to grid view'], ['table', Table2, 'Switch to table view']] as const).map(([mode, Icon, label]) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
+              aria-label={label}
               style={{
                 background: viewMode === mode ? 'var(--bg-surface)' : 'transparent',
                 border: 'none', borderRadius: '6px', cursor: 'pointer',

@@ -59,7 +59,7 @@ function GraphNodes({ data }: { data: any }) {
         )
       })}
 
-      {data.links.map((link: any, i: number) => {
+      {(data.links || []).map((link: any, i: number) => {
         const sourceNode = nodes.find((n: any) => n.id === link.source)
         const targetNode = nodes.find((n: any) => n.id === link.target)
         

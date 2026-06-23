@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
     log.info("Initializing NetworkX knowledge graph")
     init_graph()
 
-    log.info("SMRITI API ready ✓")
+    log.info("SMRITI API ready [OK]")
     yield
     # ── Shutdown ─────────────────────────────────────────────────────
     log.info("SMRITI API shutting down")
