@@ -35,7 +35,7 @@ export function Dashboard() {
   const okAssets = assets?.filter((a: AssetSummary) => a.severity === 'OK') || []
 
   return (
-    <div className="flex flex-col gap-12 md:gap-24">
+    <div className="p-8 md:p-12 flex flex-col gap-12 md:gap-24 w-full max-w-[1600px] mx-auto">
       {/* Editorial Split Header */}
       <motion.section 
         initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
@@ -91,16 +91,14 @@ export function Dashboard() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[270px]">
-             <Card className="md:col-span-8 md:row-span-2"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
-             <Card className="md:col-span-4"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
-             <Card className="md:col-span-4"><div className="w-full h-full animate-pulse bg-white/5" /></Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[270px]">
+             <Card><div className="w-full h-full animate-pulse bg-white/5" /></Card>
+             <Card><div className="w-full h-full animate-pulse bg-white/5" /></Card>
+             <Card><div className="w-full h-full animate-pulse bg-white/5" /></Card>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[270px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[270px]">
             {assets?.slice(0, 3).map((asset: AssetSummary, i: number) => {
-              // Asymmetrical layout logic: first item takes massive space, others stack
-              const spanClasses = i === 0 ? "md:col-span-8 md:row-span-2" : "md:col-span-4"
               const variant = asset.severity.toLowerCase() as 'critical' | 'warning' | 'ok' | 'default'
               
               return (
@@ -110,7 +108,7 @@ export function Dashboard() {
                   whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.8, delay: i * 0.1, ease: [0.32,0.72,0,1] }}
-                  className={spanClasses}
+                  className="w-full"
                 >
                   <Card variant={variant} className="h-full">
                     <div className="p-6 h-full flex flex-col justify-between">

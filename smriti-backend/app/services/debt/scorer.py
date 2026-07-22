@@ -50,6 +50,9 @@ def calculate_debt_score(
     # 0 days old = no penalty; 365+ days = full penalty
     try:
         last_dt = datetime.fromisoformat(last_updated_iso.replace("Z", "+00:00"))
+        # Ensure the parsed datetime is timezone-aware
+        if last_dt.tzinfo is None:
+            last_dt = last_dt.replace(tzinfo=timezone.utc)
         days_old = (datetime.now(timezone.utc) - last_dt).days
     except (ValueError, AttributeError):
         days_old = 365
@@ -87,7 +90,13 @@ async def recalculate_debt(asset_id: str) -> dict:
     try:
         col = chroma.get_collection(col_name)
     except Exception:
-        return {}
+        # Asset doesn't exist — treat as zero knowledge items (maximum debt)
+        return calculate_debt_score(
+            item_count=0,
+            expert_count=0,
+            last_updated_iso="",
+            operational_criticality=0.5,
+        )
 
     all_items = col.get(include=["metadatas"])
     metas = all_items.get("metadatas") or []
