@@ -1,6 +1,6 @@
 """Expert Flight Risk detection — flags experts with long inactivity."""
 import logging
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from app.db.chroma import get_chroma
 
@@ -16,7 +16,7 @@ def detect_flight_risks() -> list[dict]:
     Returns a list of at-risk experts sorted by days_inactive descending.
     """
     chroma = get_chroma()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     try:
         collections = chroma.list_collections()

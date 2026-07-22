@@ -4,12 +4,13 @@ Processes pages in batches of 5 for efficient API usage.
 """
 import json
 import logging
-from app.services.llm.client import LLMClient
+
 from app.prompts import (
     TAG_EXTRACTION_SYSTEM,
     build_tag_extraction_prompt,
     validate_tag_extraction_output,
 )
+from app.services.llm.client import LLMClient
 
 logger = logging.getLogger(__name__)
 

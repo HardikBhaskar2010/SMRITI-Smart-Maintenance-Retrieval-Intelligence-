@@ -1,5 +1,5 @@
+
 from pydantic import BaseModel
-from typing import Optional
 
 
 class IngestProgress(BaseModel):
@@ -10,7 +10,7 @@ class IngestProgress(BaseModel):
     total_pages: int = 0
     tags_found: list[str] = []
     items_embedded: int = 0
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class IngestResult(BaseModel):

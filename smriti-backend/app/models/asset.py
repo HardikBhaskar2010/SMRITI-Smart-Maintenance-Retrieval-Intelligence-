@@ -1,15 +1,16 @@
-from pydantic import BaseModel, Field
-from typing import Literal, Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 
 class ThreadItem(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     content: str
     source_document: str
-    source_page: Optional[int] = None
-    source_section: Optional[str] = None
+    source_page: int | None = None
+    source_section: str | None = None
     added_by: Literal["ingestion_pipeline", "guru_mode", "manual"] = "ingestion_pipeline"
     added_at: datetime = Field(default_factory=datetime.utcnow)
     embedding_model: str = "chromadb-default"

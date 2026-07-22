@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Literal, Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 
 class GuruMessage(BaseModel):
@@ -9,7 +10,7 @@ class GuruMessage(BaseModel):
     content: str
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     embedded: bool = False
-    item_id: Optional[str] = None
+    item_id: str | None = None
 
 
 class GuruSession(BaseModel):

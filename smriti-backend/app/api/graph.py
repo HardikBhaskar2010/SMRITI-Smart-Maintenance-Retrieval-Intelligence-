@@ -1,5 +1,6 @@
 """GET /api/graph — NetworkX graph as node+edge JSON for R3F visualization"""
 from fastapi import APIRouter
+
 from app.db.graph import get_graph
 
 router = APIRouter()

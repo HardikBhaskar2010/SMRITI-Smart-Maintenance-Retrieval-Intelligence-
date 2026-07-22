@@ -1,8 +1,8 @@
+
 import chromadb
 from chromadb.config import Settings
-from typing import Optional
 
-_client: Optional[chromadb.PersistentClient] = None
+_client: chromadb.PersistentClient | None = None
 
 
 def init_chroma(persist_dir: str) -> None:

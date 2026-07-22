@@ -1,13 +1,13 @@
 """Analytics API — trends, flight risk, portfolio stats."""
 import logging
+
 from fastapi import APIRouter, HTTPException, Query
 
+from app.services.analytics.flight_risk import detect_flight_risks
 from app.services.analytics.trend_engine import (
     compute_asset_trend,
     compute_portfolio_trends,
 )
-from app.services.analytics.flight_risk import detect_flight_risks
-from app.db.analytics_store import get_alerts, mark_alerts_read
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

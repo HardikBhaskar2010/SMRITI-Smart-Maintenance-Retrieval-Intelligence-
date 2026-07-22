@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
 import * as THREE from 'three'
@@ -69,6 +69,7 @@ function GraphNodes({ data }: { data: any }) {
         const lineGeo = new THREE.BufferGeometry().setFromPoints(points)
 
         return (
+          // @ts-ignore
           <line key={i} geometry={lineGeo} material={lineMat} />
         )
       })}

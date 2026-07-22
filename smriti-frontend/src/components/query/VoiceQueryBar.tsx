@@ -11,7 +11,7 @@ export function VoiceQueryBar({ onSubmit, loading }: VoiceQueryBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState('');
 
-  const { status, transcript, startListening, stopListening, isSupported } =
+  const { status, startListening, stopListening, isSupported } =
     useVoice({
       language: 'hi-IN',
       silenceMs: 1500,

@@ -1,6 +1,7 @@
 """Alerts API — REST endpoints + WebSocket push."""
 import logging
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
+
+from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
 
 from app.db.analytics_store import get_alerts, mark_alerts_read
 from app.services.alerts.monitor import register_ws, unregister_ws

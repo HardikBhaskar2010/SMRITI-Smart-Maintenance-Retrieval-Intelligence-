@@ -4,12 +4,12 @@ pushes WebSocket alerts to connected clients on threshold crossings.
 """
 import asyncio
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.config import settings
-from app.db.analytics_store import insert_alert, get_all_latest_snapshots
-from app.services.analytics.trend_engine import snapshot_all_assets
+from app.db.analytics_store import get_all_latest_snapshots, insert_alert
 from app.services.analytics.flight_risk import detect_flight_risks
+from app.services.analytics.trend_engine import snapshot_all_assets
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,6 @@ def unregister_ws(ws) -> None:
 
 
 async def _broadcast(payload: dict) -> None:
-    import json
     dead = set()
     for ws in _alert_connections:
         try:
@@ -72,7 +71,7 @@ async def _check_cycle() -> None:
                 "alert_type": "SCORE_CROSSED_CRITICAL",
                 "message": msg,
                 "severity": "CRITICAL",
-                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
             })
             logger.warning("ALERT: %s", msg)
 
@@ -96,5 +95,5 @@ async def _check_cycle() -> None:
                     "alert_type": "EXPERT_INACTIVE",
                     "message": msg,
                     "severity": "WARNING",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "created_at": datetime.now(UTC).isoformat(),
                 })

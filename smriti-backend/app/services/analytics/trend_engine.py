@@ -5,13 +5,12 @@ Uses linear regression on historical debt snapshots to project
 the debt score 30 days into the future and detect SLA breach risk.
 """
 import logging
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import TypedDict
 
-from app.db.analytics_store import get_snapshots, record_snapshot, get_all_latest_snapshots
-from app.services.debt.scorer import recalculate_debt, DEFAULT_CRITICALITY
+from app.db.analytics_store import get_snapshots, record_snapshot
 from app.db.chroma import get_chroma
-from app.utils.tag_normalizer import normalize_asset_id
+from app.services.debt.scorer import recalculate_debt
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +71,7 @@ async def compute_asset_trend(asset_id: str, days: int = 30) -> AssetTrend:
 
     # Synthesise demo history if insufficient real data
     if len(snapshots) < 3:
-        base_date = datetime.now(timezone.utc) - timedelta(days=days)
+        base_date = datetime.now(UTC) - timedelta(days=days)
         import random
         random.seed(hash(asset_id))  # Deterministic per asset
         synth: list[dict] = []

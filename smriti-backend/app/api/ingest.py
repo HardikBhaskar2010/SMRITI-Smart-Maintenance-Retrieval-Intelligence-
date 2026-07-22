@@ -4,7 +4,9 @@ Used when WebSocket is not available (e.g., curl testing).
 """
 import shutil
 from pathlib import Path
-from fastapi import APIRouter, HTTPException, UploadFile, File
+
+from fastapi import APIRouter, File, HTTPException, UploadFile
+
 from app.config import settings
 from app.services.ingestion.pipeline import run_ingestion
 

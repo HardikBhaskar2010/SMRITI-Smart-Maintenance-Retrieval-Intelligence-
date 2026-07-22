@@ -34,7 +34,7 @@ export function BottomNav() {
             minHeight: '52px',
           })}
         >
-          {({ isActive }) => (
+          {() => (
             <>
               <Icon size={20} />
               <span style={{ lineHeight: 1 }}>{label}</span>

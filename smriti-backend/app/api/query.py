@@ -1,5 +1,6 @@
 """POST /api/query"""
 from fastapi import APIRouter
+
 from app.models.query import QueryRequest, QueryResponse
 from app.services.rag.engine import run_query
 

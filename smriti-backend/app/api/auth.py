@@ -1,12 +1,12 @@
 """JWT Authentication — demo-mode with hardcoded users."""
 import logging
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 try:
-    from jose import jwt, JWTError
+    from jose import JWTError, jwt
 except ImportError:
     jwt = None  # type: ignore
     JWTError = Exception  # type: ignore
@@ -43,12 +43,12 @@ DEMO_USERS = {
 def _create_token(username: str, role: str) -> str:
     if jwt is None:
         return f"demo-token-{username}"
-    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.JWT_EXPIRE_MINUTES)
+    expire = datetime.now(UTC) + timedelta(minutes=settings.JWT_EXPIRE_MINUTES)
     payload = {
         "sub": username,
         "role": role,
         "exp": expire,
-        "iat": datetime.now(timezone.utc),
+        "iat": datetime.now(UTC),
     }
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 

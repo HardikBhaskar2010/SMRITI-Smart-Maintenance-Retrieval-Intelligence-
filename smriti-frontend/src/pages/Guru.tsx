@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Send, User, Bot, AlertCircle } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { useGuruStore } from '@/stores/guruStore'
-import { startGuruSession } from '@/api/guru'
+import { useGuruSession } from '@/hooks/useGuruSession'
 
 export function Guru() {
   const {
@@ -14,8 +13,7 @@ export function Guru() {
     expertAnswer,
     setExpertAnswer,
     startSession,
-    submitAnswer,
-    endSession
+    submitAnswer
   } = useGuruSession()
 
   const [assetInput, setAssetInput] = useState('T-101')
@@ -49,6 +47,13 @@ export function Guru() {
       setError(err.message || 'Failed to process response')
     }
   }
+
+  const status = session?.status || 'idle'
+  const assetId = session?.asset_id || ''
+  const expertName = session?.expert_name || ''
+  const currentScore = session?.current_debt_score || 0
+  const messages = session?.messages || []
+  const isLoading = isStarting || isSubmitting
 
   const scoreImprovement = session ? (session.initial_debt_score - session.current_debt_score) : 0
 
@@ -140,7 +145,7 @@ export function Guru() {
       <Card className="w-full md:w-2/3 h-full flex flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
           <AnimatePresence initial={false}>
-            {messages.map((msg, i) => (
+            {messages.map((msg: any, i: number) => (
               <motion.div 
                 key={i}
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -177,15 +182,15 @@ export function Guru() {
             {error && <div className="text-critical text-sm mb-2">{error}</div>}
             <form onSubmit={handleSend} className="relative flex items-center">
               <input
-                value={input}
-                onChange={e => setInput(e.target.value)}
+                value={expertAnswer}
+                onChange={e => setExpertAnswer(e.target.value)}
                 placeholder="Type your response..."
                 className="w-full bg-surface2 border border-white/10 rounded-full pl-6 pr-14 py-4 outline-none focus:border-accent/50 transition-colors"
                 disabled={isLoading}
               />
               <button 
                 type="submit" 
-                disabled={!input.trim() || isLoading}
+                disabled={!expertAnswer.trim() || isLoading}
                 className="absolute right-2 w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white hover:bg-accent/80 transition-colors disabled:opacity-50"
               >
                 <Send size={18} className="ml-1" />

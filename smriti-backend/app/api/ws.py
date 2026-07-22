@@ -2,12 +2,11 @@
 WebSocket /ws/ingest — real-time ingestion progress feed.
 Streams IngestProgress events as JSON lines to the connected frontend.
 """
-import json
 import logging
-import shutil
 from pathlib import Path
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+
 from app.config import settings
 from app.models.ingest import IngestProgress
 from app.services.ingestion.pipeline import run_ingestion

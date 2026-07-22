@@ -113,7 +113,7 @@ export function DropZone() {
             {/* Indeterminate progress bar */}
             <div style={{ background: 'var(--bg-elevated)', borderRadius: '4px', height: '4px', overflow: 'hidden' }}>
               <div style={{
-                height: '100%', background: 'var(--accent-teal)',
+                height: '100%',
                 borderRadius: '4px',
                 animation: 'shimmer 1.4s ease-in-out infinite',
                 backgroundSize: '400px 100%',

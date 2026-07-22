@@ -1,8 +1,9 @@
 """Guru Mode API: POST /api/guru/start · POST /api/guru/respond · GET /api/guru/session/{id}"""
 from fastapi import APIRouter, HTTPException
-from app.models.guru import GuruStartRequest, GuruRespondRequest
-from app.services.guru.session import start_guru_session, process_expert_answer
+
 from app.db.session_store import get_session_store
+from app.models.guru import GuruRespondRequest, GuruStartRequest
+from app.services.guru.session import process_expert_answer, start_guru_session
 
 router = APIRouter()
 

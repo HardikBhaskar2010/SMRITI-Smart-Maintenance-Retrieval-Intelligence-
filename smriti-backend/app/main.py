@@ -10,10 +10,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.config import settings
+from app.db.analytics_store import init_analytics_db
 from app.db.chroma import init_chroma
 from app.db.graph import init_graph
-from app.db.analytics_store import init_analytics_db
-from app.config import settings
 from app.utils.logger import setup_logging
 
 setup_logging()
@@ -80,8 +80,18 @@ app.add_middleware(
 )
 
 # ── Routes ────────────────────────────────────────────────────────────
-from app.api import ingest, assets, query, guru, graph, ws  # noqa: E402
-from app.api import analytics, alerts, auth, export          # noqa: E402
+from app.api import (  # noqa: E402  # noqa: E402
+    alerts,
+    analytics,
+    assets,
+    auth,
+    export,
+    graph,
+    guru,
+    ingest,
+    query,
+    ws,
+)
 
 app.include_router(auth.router,      prefix="/api", tags=["Auth"])
 app.include_router(ingest.router,    prefix="/api", tags=["Ingestion"])
@@ -110,16 +120,16 @@ def health_check():
 # ── Streaming query endpoint ──────────────────────────────────────────
 from fastapi.responses import StreamingResponse  # noqa: E402
 
+
 @app.post("/api/query/stream", tags=["Query"])
 async def stream_query(body: dict):
     """
     Server-Sent Events streaming endpoint.
     Streams LLM answer tokens as they are generated.
     """
-    from app.services.llm.client import LLMClient
-    from app.prompts import QUERY_SYNTHESIS_SYSTEM, build_query_prompt
-    from app.services.rag.engine import run_query
     from app.models.query import QueryRequest
+    from app.prompts import QUERY_SYNTHESIS_SYSTEM, build_query_prompt
+    from app.services.llm.client import LLMClient
 
     query_text = body.get("query", "")
     asset_id = body.get("asset_id")
@@ -130,8 +140,8 @@ async def stream_query(body: dict):
     except Exception:
         req = QueryRequest(query=query_text)
 
-    from app.services.rag.retriever import retrieve_thread_context
     from app.services.rag.engine import ASSET_ID_PATTERN, _find_relevant_assets, _format_context
+    from app.services.rag.retriever import retrieve_thread_context
 
     # Identify assets
     if asset_id:

@@ -3,7 +3,7 @@ Phase 2 Export Engine — PDF and Excel report generation.
 """
 import io
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -22,14 +22,19 @@ def generate_asset_pdf(asset_id: str, asset_data: dict, thread_items: list[dict]
     Returns raw PDF bytes.
     """
     try:
-        from reportlab.lib.pagesizes import A4
         from reportlab.lib import colors
+        from reportlab.lib.enums import TA_CENTER, TA_LEFT
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
         from reportlab.lib.units import mm
         from reportlab.platypus import (
-            SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
+            HRFlowable,
+            Paragraph,
+            SimpleDocTemplate,
+            Spacer,
+            Table,
+            TableStyle,
         )
-        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-        from reportlab.lib.enums import TA_CENTER, TA_LEFT
 
         buf = io.BytesIO()
         doc = SimpleDocTemplate(
@@ -81,7 +86,7 @@ def generate_asset_pdf(asset_id: str, asset_data: dict, thread_items: list[dict]
             ["Knowledge Items", str(asset_data.get("item_count", len(thread_items)))],
             ["Expert Count", str(asset_data.get("expert_count", "N/A"))],
             ["Last Updated", asset_data.get("last_updated", "N/A")[:10]],
-            ["Report Generated", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")],
+            ["Report Generated", datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")],
         ]
         overview_table = Table(overview_data, colWidths=[60 * mm, 110 * mm])
         overview_table.setStyle(TableStyle([
@@ -166,7 +171,7 @@ def generate_asset_excel(asset_id: str, asset_data: dict, thread_items: list[dic
     """
     try:
         import openpyxl
-        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+        from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
         from openpyxl.utils import get_column_letter
 
         wb = openpyxl.Workbook()
@@ -182,7 +187,7 @@ def generate_asset_excel(asset_id: str, asset_data: dict, thread_items: list[dic
 
         ws_sum.append(["SMRITI Knowledge Debt Report"])
         ws_sum["A1"].font = Font(bold=True, size=16, name="Calibri", color=dark)
-        ws_sum.append(["Generated", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")])
+        ws_sum.append(["Generated", datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")])
         ws_sum.append([])
 
         summary_rows = [

@@ -2,10 +2,10 @@
 SQLite-backed analytics store for time-series debt score snapshots.
 Provides lightweight persistence without heavy DB dependencies.
 """
-import sqlite3
 import logging
+import sqlite3
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.config import settings
 
@@ -64,7 +64,7 @@ def record_snapshot(
     expert_count: int,
 ) -> None:
     """Insert a debt score snapshot for an asset."""
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with _connect() as conn:
         conn.execute(
             "INSERT INTO debt_snapshots (asset_id, score, severity, item_count, expert_count, recorded_at) "
@@ -106,7 +106,7 @@ def insert_alert(
     severity: str,
 ) -> int:
     """Insert an alert and return its id."""
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     with _connect() as conn:
         cur = conn.execute(
             "INSERT INTO alerts (asset_id, alert_type, message, severity, created_at) "

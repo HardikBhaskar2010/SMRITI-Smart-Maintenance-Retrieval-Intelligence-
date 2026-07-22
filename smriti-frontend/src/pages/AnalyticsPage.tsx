@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { BarChart2, TrendingUp, AlertTriangle, Shield, Users, Activity } from 'lucide-react';
+import { BarChart2, TrendingUp, Shield, Users, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend, ReferenceLine,
+  Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { EmptyState } from '@/components/ui/EmptyState';

@@ -1,4 +1,4 @@
-import { FileText, ExternalLink } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import type { ThreadItem as ThreadItemType } from '@/api/types';
 import { formatDate, truncate } from '@/utils/formatters';
 

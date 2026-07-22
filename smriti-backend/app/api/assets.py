@@ -1,6 +1,8 @@
 """GET /api/assets  · GET /api/assets/{asset_id}"""
 import logging
+
 from fastapi import APIRouter, HTTPException
+
 from app.db.chroma import get_chroma
 from app.services.debt.scorer import recalculate_debt
 from app.utils.tag_normalizer import display_asset_id

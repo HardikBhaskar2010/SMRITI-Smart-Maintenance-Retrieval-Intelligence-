@@ -5,17 +5,17 @@ Generates opening questions and follow-ups using Llama 3.3 70B.
 import json
 import logging
 
-from app.services.llm.client import LLMClient
+from app.db.chroma import get_chroma
 from app.prompts import (
+    GURU_FOLLOWUP_SYSTEM,
     GURU_OPENING_SYSTEM,
+    build_guru_followup_prompt,
     build_guru_opening_prompt,
     validate_guru_opening_output,
-    GURU_FOLLOWUP_SYSTEM,
-    build_guru_followup_prompt,
 )
-from app.db.chroma import get_chroma
-from app.utils.tag_normalizer import normalize_asset_id
 from app.services.debt.scorer import recalculate_debt
+from app.services.llm.client import LLMClient
+from app.utils.tag_normalizer import normalize_asset_id
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ async def generate_opening_questions(
         f"What are the most common failure modes you have seen on {asset_id}?",
         f"What early warning signs do you watch for before a fault trip on {asset_id}?",
         f"Does {asset_id} behave differently during monsoon season or extreme heat?",
-        f"Are there any maintenance procedures you do differently from what the OEM manual specifies?",
+        "Are there any maintenance procedures you do differently from what the OEM manual specifies?",
         f"What other equipment does {asset_id} depend on, and how do failures propagate?",
         f"Have there been any near-misses or incidents on {asset_id} that were never formally reported?",
         f"What is the single most important thing the next engineer must know about {asset_id}?",

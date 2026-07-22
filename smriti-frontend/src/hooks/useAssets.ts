@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useAssetStore } from '@/stores/assetStore'
 import { fetchAssets, fetchAsset } from '@/api/assets'
 

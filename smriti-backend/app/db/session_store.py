@@ -3,7 +3,7 @@ In-memory store for active Guru Mode sessions.
 Sessions are lost on server restart — this is acceptable for the hackathon prototype.
 Production: replace with Redis or a DB-backed store.
 """
-from typing import Optional
+
 from app.models.guru import GuruSession
 
 
@@ -15,7 +15,7 @@ class SessionStore:
     def save_session(self, session: GuruSession) -> None:
         self._sessions[session.session_id] = session
 
-    def get_session(self, session_id: str) -> Optional[GuruSession]:
+    def get_session(self, session_id: str) -> GuruSession | None:
         return self._sessions.get(session_id)
 
     def delete_session(self, session_id: str) -> None:
@@ -32,7 +32,7 @@ class SessionStore:
         return self._pending_questions.get(session_id, [])
 
 
-_store: Optional[SessionStore] = None
+_store: SessionStore | None = None
 
 
 def get_session_store() -> SessionStore:

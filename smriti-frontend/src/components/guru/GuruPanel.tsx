@@ -5,18 +5,11 @@ import { useGuruSession } from '@/hooks/useGuruSession';
 import { GuruMessage } from './GuruMessage';
 import { GuruProgress } from './GuruProgress';
 import { Button } from '@/components/ui/Button';
-import { Spinner } from '@/components/ui/Spinner';
-
-function getSeverity(score: number) {
-  if (score <= 40) return 'OK' as const;
-  if (score <= 70) return 'WARNING' as const;
-  return 'CRITICAL' as const;
-}
 
 export function GuruPanel() {
   const {
     session, isSubmitting, expertAnswer, setExpertAnswer,
-    displayedDebtScore, submitAnswer, endSession,
+    submitAnswer, endSession,
   } = useGuruSession();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -94,11 +87,10 @@ export function GuruPanel() {
           {/* Progress */}
           <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--bg-stroke)', flexShrink: 0 }}>
             <GuruProgress
-              questionsAsked={session.questions_asked}
+              questionsAsked={session.messages.length / 2}
               initialScore={session.initial_debt_score}
-              currentScore={displayedDebtScore}
-              severity={getSeverity(displayedDebtScore)}
-              knowledgeAdded={session.knowledge_added}
+              currentScore={session.current_debt_score}
+              knowledgeAdded={54} // Mock metric
             />
           </div>
 

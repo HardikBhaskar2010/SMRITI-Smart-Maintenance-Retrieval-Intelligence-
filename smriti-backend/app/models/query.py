@@ -1,17 +1,17 @@
+
 from pydantic import BaseModel
-from typing import Optional
 
 
 class QueryRequest(BaseModel):
     query: str
     max_results: int = 5
-    asset_id: Optional[str] = None  # Force-scope to one asset if provided
+    asset_id: str | None = None  # Force-scope to one asset if provided
 
 
 class Citation(BaseModel):
     source_document: str
-    source_page: Optional[int] = None
-    source_section: Optional[str] = None
+    source_page: int | None = None
+    source_section: str | None = None
     item_id: str
 
 

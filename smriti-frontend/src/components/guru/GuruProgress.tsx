@@ -6,7 +6,6 @@ interface GuruProgressProps {
   totalQuestions?: number;
   initialScore: number;
   currentScore: number;
-  severity: Severity;
   knowledgeAdded: number;
 }
 
@@ -21,7 +20,6 @@ export function GuruProgress({
   totalQuestions = 8,
   initialScore,
   currentScore,
-  severity,
   knowledgeAdded,
 }: GuruProgressProps) {
   const progress = Math.min(questionsAsked / totalQuestions, 1);

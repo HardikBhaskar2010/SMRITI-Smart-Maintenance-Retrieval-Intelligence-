@@ -13,7 +13,7 @@ interface UseVoiceOptions {
 export function useVoice({ onResult, onError, silenceMs = 1500, language = 'hi-IN' }: UseVoiceOptions) {
   const [status, setStatus] = useState<VoiceStatus>('idle')
   const [transcript, setTranscript] = useState('')
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  const recognitionRef = useRef<any>(null)
   const silenceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const isSupported = typeof window !== 'undefined' &&
@@ -32,6 +32,7 @@ export function useVoice({ onResult, onError, silenceMs = 1500, language = 'hi-I
       return
     }
 
+    // @ts-ignore
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     const rec = new SpeechRecognition()
     rec.continuous = true

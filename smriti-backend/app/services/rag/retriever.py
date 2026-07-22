@@ -1,5 +1,6 @@
 """RAG retriever — semantic search within a single asset's ChromaDB thread."""
 import logging
+
 from app.db.chroma import get_chroma
 from app.utils.tag_normalizer import normalize_asset_id
 

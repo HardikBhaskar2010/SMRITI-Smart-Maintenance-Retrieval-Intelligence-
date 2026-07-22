@@ -1,7 +1,7 @@
-import networkx as nx
-from typing import Optional
 
-_graph: Optional[nx.Graph] = None
+import networkx as nx
+
+_graph: nx.Graph | None = None
 
 
 def init_graph() -> None:

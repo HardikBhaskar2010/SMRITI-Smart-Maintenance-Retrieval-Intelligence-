@@ -1,9 +1,9 @@
 """
 Document text extraction: PDF · DOCX · image (OCR fallback)
 """
-from pathlib import Path
 import io
 import logging
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

@@ -1,8 +1,7 @@
 """Guru Mode session lifecycle management."""
-import json
 import logging
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from app.config import settings
@@ -75,7 +74,7 @@ async def process_expert_answer(session_id: str, answer: str) -> dict:
                 "added_by":          "guru_mode",
                 "expert_name":       session.expert_name,
                 "expert_attributed": True,
-                "added_at":          datetime.now(timezone.utc).isoformat(),
+                "added_at":          datetime.now(UTC).isoformat(),
                 "source_document":   f"guru_session_{session_id}",
                 "source_page":       0,
                 "content_hash":      chunk_hash,

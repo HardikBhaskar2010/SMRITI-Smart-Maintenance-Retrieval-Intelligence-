@@ -6,9 +6,10 @@ import asyncio
 import logging
 import time
 import uuid
-from datetime import datetime, timezone
+from collections.abc import Awaitable, Callable
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Callable, Awaitable, Optional
+from typing import Optional
 
 from app.db.chroma import get_chroma
 from app.db.graph import get_graph
@@ -94,7 +95,7 @@ async def run_ingestion(
                 "source_page": chunk.get("source_page", 0),
                 "source_section": chunk.get("source_section", ""),
                 "added_by": "ingestion_pipeline",
-                "added_at": datetime.now(timezone.utc).isoformat(),
+                "added_at": datetime.now(UTC).isoformat(),
                 "expert_attributed": False,
                 "content_hash": chunk_hash,
             }],

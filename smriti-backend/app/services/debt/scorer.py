@@ -4,7 +4,7 @@ Four weighted dimensions: doc coverage (30%), expert distribution (35%),
 recency (20%), operational criticality (15%).
 """
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.db.chroma import get_chroma
 from app.utils.tag_normalizer import normalize_asset_id
@@ -52,8 +52,8 @@ def calculate_debt_score(
         last_dt = datetime.fromisoformat(last_updated_iso.replace("Z", "+00:00"))
         # Ensure the parsed datetime is timezone-aware
         if last_dt.tzinfo is None:
-            last_dt = last_dt.replace(tzinfo=timezone.utc)
-        days_old = (datetime.now(timezone.utc) - last_dt).days
+            last_dt = last_dt.replace(tzinfo=UTC)
+        days_old = (datetime.now(UTC) - last_dt).days
     except (ValueError, AttributeError):
         days_old = 365
     recency_penalty = min(1.0, days_old / 365.0) * 20.0
@@ -107,7 +107,7 @@ async def recalculate_debt(asset_id: str) -> dict:
 
     # Most recent timestamp
     timestamps = [m.get("added_at", "") for m in metas if m.get("added_at")]
-    last_updated = max(timestamps) if timestamps else datetime.now(timezone.utc).isoformat()
+    last_updated = max(timestamps) if timestamps else datetime.now(UTC).isoformat()
 
     asset_type = (col.metadata or {}).get("asset_type", "UNKNOWN").upper().replace(" ", "_")
     criticality = DEFAULT_CRITICALITY.get(asset_type, 0.5)

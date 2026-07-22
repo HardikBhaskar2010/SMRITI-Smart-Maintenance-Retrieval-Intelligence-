@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import type { Severity } from '@/api/types';
 
 interface GraphControlsProps {
