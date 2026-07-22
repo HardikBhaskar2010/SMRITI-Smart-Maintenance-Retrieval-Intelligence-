@@ -41,7 +41,7 @@ export function GuruPage() {
         </div>
         <Button
           variant="primary"
-          icon={<Brain size={14} />}
+          trailingIcon={<Brain size={14} />}
           onClick={() => { setSelectedAssetId(undefined); setGuruModalOpen(true); }}
           size="md"
         >

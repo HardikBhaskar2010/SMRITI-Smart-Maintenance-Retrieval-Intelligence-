@@ -4,16 +4,20 @@ import { Send, User, Bot, AlertCircle } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { useGuruStore } from '@/stores/guruStore'
-import { startGuruSession, processGuruResponse } from '@/api/guru'
+import { startGuruSession } from '@/api/guru'
 
 export function Guru() {
-  const { 
-    sessionId, assetId, expertName, currentQuestion, messages, 
-    status, isLoading, currentScore, initialScore, 
-    startSession, addMessage, setCurrentQuestion, updateScore, setLoading, endSession 
-  } = useGuruStore()
+  const {
+    session,
+    isStarting,
+    isSubmitting,
+    expertAnswer,
+    setExpertAnswer,
+    startSession,
+    submitAnswer,
+    endSession
+  } = useGuruSession()
 
-  const [input, setInput] = useState('')
   const [assetInput, setAssetInput] = useState('T-101')
   const [expertInput, setExpertInput] = useState('Rahul')
   const [error, setError] = useState<string | null>(null)
@@ -21,51 +25,33 @@ export function Guru() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, currentQuestion])
+  }, [session?.messages])
 
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!assetInput.trim() || !expertInput.trim()) return
     setError(null)
-    setLoading(true)
     try {
-      const res = await startGuruSession({ asset_id: assetInput, expert_name: expertInput })
-      startSession(res.session_id, assetInput, expertInput, res.first_question, res.current_debt_score)
+      await startSession(assetInput, expertInput)
     } catch (err: any) {
       setError(err.message || 'Failed to start session')
-    } finally {
-      setLoading(false)
     }
   }
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim() || !sessionId || isLoading) return
-    const text = input.trim()
-    setInput('')
+    if (!expertAnswer.trim() || !session || isSubmitting) return
     setError(null)
-    addMessage('expert', text)
-    setLoading(true)
 
     try {
-      const res = await processGuruResponse(sessionId, text)
-      updateScore(res.new_debt_score)
-      if (res.session_status === 'completed') {
-        endSession()
-        addMessage('interviewer', "Thank you! The session is complete. The knowledge debt has been updated.")
-      } else if (res.next_question) {
-        addMessage('interviewer', res.next_question)
-        setCurrentQuestion(res.next_question)
-      }
+      await submitAnswer()
     } catch (err: any) {
       setError(err.message || 'Failed to process response')
-      setInput(text) // Restore input on error
-    } finally {
-      setLoading(false)
     }
   }
 
-  const scoreImprovement = initialScore - currentScore
+  const scoreImprovement = session ? (session.initial_debt_score - session.current_debt_score) : 0
+
 
   if (status === 'idle') {
     return (
