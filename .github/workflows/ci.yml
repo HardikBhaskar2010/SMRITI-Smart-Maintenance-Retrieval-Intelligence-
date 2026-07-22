@@ -1,0 +1,72 @@
+name: SMRITI CI — Phase 2
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  backend-quality:
+    name: Backend — Lint, Type-Check & Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: smriti-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ruff lint
+        run: ruff check app/ --output-format=github
+
+      - name: Run unit tests
+        env:
+          OPENROUTER_API_KEY: sk-or-test-placeholder
+          CHROMA_PERSIST_DIR: ":memory:"
+          ANALYTICS_DB_PATH: ":memory:"
+        run: |
+          pytest tests/test_debt_scorer.py tests/test_utils.py \
+            -v --tb=short --no-header
+
+  frontend-quality:
+    name: Frontend — Type-Check & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: smriti-frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: smriti-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: TypeScript type-check
+        run: npx tsc --noEmit
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smriti-frontend-dist
+          path: smriti-frontend/dist/
+          retention-days: 7

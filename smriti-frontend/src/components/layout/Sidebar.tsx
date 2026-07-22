@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Search, Network, Brain, Upload } from 'lucide-react';
+import { LayoutDashboard, Search, Network, Brain, Upload, BarChart2 } from 'lucide-react';
 import { useUIStore } from '@/stores/uiStore';
 
 const NAV_ITEMS = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/analytics', icon: BarChart2,       label: 'Analytics' },
   { to: '/query',     icon: Search,          label: 'Query'     },
   { to: '/graph',     icon: Network,         label: 'Graph (3D)'},
   { to: '/guru',      icon: Brain,           label: 'Guru Mode' },
@@ -101,7 +102,7 @@ export function Sidebar() {
       {sidebarOpen && (
         <div style={{ padding: '16px 20px', borderTop: '1px solid var(--bg-stroke)' }}>
           <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-muted)' }}>
-            SMRITI v1.0 · ET AI Hackathon 2026
+            SMRITI v2.0 · Phase 2 · ET AI Hackathon 2026
           </p>
         </div>
       )}

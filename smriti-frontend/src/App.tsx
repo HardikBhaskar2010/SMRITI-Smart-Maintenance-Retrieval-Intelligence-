@@ -4,11 +4,15 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { ToastContainer } from '@/components/ui/Toast';
+import { AlertBell } from '@/components/alerts/AlertBell';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { QueryPage } from '@/pages/QueryPage';
 import { GraphPage } from '@/pages/GraphPage';
 import { GuruPage } from '@/pages/GuruPage';
 import { UploadPage } from '@/pages/UploadPage';
+import { AnalyticsPage } from '@/pages/AnalyticsPage';
+import { LoginPage } from '@/pages/LoginPage';
+import { useAuthStore } from '@/stores/authStore';
 import '@/styles/globals.css';
 import '@/styles/animations.css';
 import '@/styles/typography.css';
@@ -47,24 +51,49 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="bottomnav-wrapper">
         <BottomNav />
       </div>
+
+      {/* Floating alert bell (desktop) */}
+      <div style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 150 }}>
+        <AlertBell />
+      </div>
     </div>
   );
+}
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
 }
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AppLayout>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/query"     element={<QueryPage />} />
-            <Route path="/graph"     element={<GraphPage />} />
-            <Route path="/guru"      element={<GuruPage />} />
-            <Route path="/upload"    element={<UploadPage />} />
-          </Routes>
-        </AppLayout>
+        <Routes>
+          {/* Public route */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* Protected routes — wrapped in layout */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/query"     element={<QueryPage />} />
+                    <Route path="/graph"     element={<GraphPage />} />
+                    <Route path="/guru"      element={<GuruPage />} />
+                    <Route path="/upload"    element={<UploadPage />} />
+                    <Route path="/analytics" element={<AnalyticsPage />} />
+                  </Routes>
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
         <ToastContainer />
       </BrowserRouter>
     </QueryClientProvider>
